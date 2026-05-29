@@ -9,7 +9,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class SystemMonitor {
+public class SystemMonitor implements DataSource {
     private final CentralProcessor processor;
     private long[][] previousTicks;
     private final ScheduledExecutorService scheduler;
