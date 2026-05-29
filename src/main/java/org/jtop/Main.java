@@ -1,17 +1,19 @@
 package org.jtop;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-public class Main {
-    static void main() {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        IO.println(String.format("Hello and welcome!"));
+import dev.tamboui.toolkit.app.ToolkitApp;
+import dev.tamboui.toolkit.element.Element;
+import static dev.tamboui.toolkit.Toolkit.*;
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            IO.println("i = " + i);
-        }
+public class Main extends ToolkitApp {
+
+    @Override
+    protected Element render() {
+        return panel("jtop",
+            text("jtop is alive! Press 'q' to quit.").bold().green()
+        ).rounded();
+    }
+
+    public static void main(String[] args) throws Exception {
+        new Main().run();
     }
 }
