@@ -15,17 +15,17 @@ public class CpuPanel {
 
         for( int i = 0; i < half; i++ ) {
             left[i] = row(
-                    text(String.format("%-6s", "CPU" + (i + 1))),
+                    text(String.format("CPU%02d[", (i + 1))),
                     gauge(systemSnapshot.cpuLoadPerCore()[i])
-                            .label(String.format("%5.1f%%", systemSnapshot.cpuLoadPerCore()[i] * 100))
+                            .label(String.format("%5.1f%%", systemSnapshot.cpuLoadPerCore()[i] * 100)+ "]")
             );
         }
 
         for ( int i = half; i < cores; i++ ) {
             right[i - half] = row(
-                    text(String.format("%-6s", "CPU" + (i + 1))),
+                    text(String.format("CPU%02d[", (i + 1))),
                     gauge(systemSnapshot.cpuLoadPerCore()[i])
-                            .label(String.format("%5.1f%%", systemSnapshot.cpuLoadPerCore()[i] * 100))
+                            .label(String.format("%5.1f%%", systemSnapshot.cpuLoadPerCore()[i] * 100) + "]")
             );
         }
 
