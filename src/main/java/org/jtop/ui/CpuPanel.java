@@ -9,27 +9,29 @@ public class CpuPanel {
 
     public Element render(SystemSnapshot systemSnapshot) {
         int cores = systemSnapshot.cpuLoadPerCore().length;
-        int half = cores / 2;
-        Element[] left = new Element[half];
-        Element[] right = new Element[cores - half];
+        int cols = Math.min(cores, 8);
+        int rows = (int) Math.ceil((double) cores / cols);
+        Element[] rowElements = new Element[rows];
 
-        for( int i = 0; i < half; i++ ) {
-            left[i] = row(
-                    text(String.format("CPU%02d[", (i + 1))),
-                    gauge(systemSnapshot.cpuLoadPerCore()[i])
-                            .label(String.format("%5.1f%%", systemSnapshot.cpuLoadPerCore()[i] * 100)+ "]")
-            );
+        for( int r = 0; r < rows; r++ ) {
+            Element[] slots = new Element[cols];
+            for( int c = 0; c < cols; c++ ) {
+                int coreIndex = r * cols + c;
+                if (coreIndex < cores) {
+                    double load = systemSnapshot.cpuLoadPerCore()[coreIndex];
+                    slots[c] = row(
+                            text(String.format("CPU%02d[", coreIndex + 1)),
+                            gauge(load).label(String.format("%5.1f%%", load * 100)),
+                            text("]")
+                    );
+                } else {
+                    slots[c] = text("");
+                }
+            }
+            rowElements[r] = row(slots);
         }
 
-        for ( int i = half; i < cores; i++ ) {
-            right[i - half] = row(
-                    text(String.format("CPU%02d[", (i + 1))),
-                    gauge(systemSnapshot.cpuLoadPerCore()[i])
-                            .label(String.format("%5.1f%%", systemSnapshot.cpuLoadPerCore()[i] * 100) + "]")
-            );
-        }
-
-        return panel("CPU", row(column(left), spacer(), column(right))).rounded();
+        return panel("CPU", column(rowElements)).rounded();
     }
 
 }
