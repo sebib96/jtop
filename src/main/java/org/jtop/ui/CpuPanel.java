@@ -12,9 +12,11 @@ import static dev.tamboui.toolkit.Toolkit.column;
 
 public class CpuPanel {
 
+    private static final int MAX_CORES_PER_ROW = 8;
+
     public Element render(SystemSnapshot systemSnapshot) {
         int cores = systemSnapshot.cpuLoadPerCore().length;
-        int cols = Math.min(cores, 8);
+        int cols = Math.min(cores, MAX_CORES_PER_ROW);
         int rows = (int) Math.ceil((double) cores / cols);
         Element[] rowElements = new Element[rows];
 

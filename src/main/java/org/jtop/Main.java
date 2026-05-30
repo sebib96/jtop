@@ -27,7 +27,10 @@ public class Main extends ToolkitApp {
         }
         return column(
         cpuPanel.render(snapshot),
-        memoryPanel.render(snapshot)
+        row(
+                memoryPanel.render(snapshot),
+                spacer()
+        )
         );
     }
 

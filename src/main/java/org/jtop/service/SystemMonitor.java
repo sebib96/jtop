@@ -19,6 +19,9 @@ public class SystemMonitor implements DataSource {
     private final ScheduledExecutorService scheduler;
     private final AtomicReference<SystemSnapshot> latestSnapshot;
 
+    private static final long POLLING_INITIAL_DELAY = 0;
+    private static final long POLLING_INTERVAL = 500;
+
     public SystemMonitor() {
         HardwareAbstractionLayer hal = new SystemInfo().getHardware();
 
@@ -30,7 +33,7 @@ public class SystemMonitor implements DataSource {
     }
 
     public void startPolling() {
-        scheduler.scheduleAtFixedRate(this::poll, 0, 500, TimeUnit.MILLISECONDS);
+        scheduler.scheduleAtFixedRate(this::poll, POLLING_INITIAL_DELAY, POLLING_INTERVAL, TimeUnit.MILLISECONDS);
     }
 
     private void poll() {

@@ -10,6 +10,8 @@ import static dev.tamboui.toolkit.Toolkit.*;
 
 public class MemoryPanel {
 
+    private static final int MEM_PANEL_WIDTH_PERCENT = 25;
+
     public Element render(SystemSnapshot systemSnapshot) {
         MemoryInfo ram = systemSnapshot.ram();
         MemoryInfo swap = systemSnapshot.swap();
@@ -33,7 +35,7 @@ public class MemoryPanel {
                         .fill(),
                 text("]"));
 
-        return panel("MEM", column(rowElements)).rounded();
+        return panel("MEM", column(rowElements)).rounded().percent(MEM_PANEL_WIDTH_PERCENT);
     }
 
     private String bytesToString(long bytes){
