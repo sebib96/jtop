@@ -16,7 +16,7 @@ public class CpuPanel {
     private static final int MAX_CORES_PER_ROW = 8;
     private static final Color YELLOW = Color.rgb(255, 215, 0);
     private static final Color ORANGE = Color.rgb(255, 140, 0);
-
+    
     public Element render(SystemSnapshot systemSnapshot) {
         int cores = systemSnapshot.cpuLoadPerCore().length;
         int cols = Math.min(cores, MAX_CORES_PER_ROW);
@@ -29,10 +29,12 @@ public class CpuPanel {
                 int coreIndex = r * cols + c;
                 if (coreIndex < cores) {
                     double load = systemSnapshot.cpuLoadPerCore()[coreIndex];
+                    Color fill = loadColor(load);
                     slots[c] = row(
                             text(String.format("CPU%02d[", coreIndex + 1)),
                             new CpuGauge(load, String.format("%5.1f%%", load * 100))
-                                    .gaugeStyle(Style.EMPTY.fg(loadColor(load)))
+                                    .gaugeStyle(Style.EMPTY.fg(fill))
+                                    .labelFgColor(labelColor(fill))
                                     .fill(),
                             text("]")
                     );
@@ -51,6 +53,11 @@ public class CpuPanel {
         if (load < 0.50) return YELLOW;
         if (load < 0.75) return ORANGE;
         return Color.RED;
+    }
+
+    private Color labelColor(Color fillColor) {
+        if (fillColor == Color.RED) return Color.WHITE;
+        return Color.BLACK;
     }
 
 }

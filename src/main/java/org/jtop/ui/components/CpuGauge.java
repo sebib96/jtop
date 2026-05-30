@@ -16,6 +16,8 @@ public class CpuGauge extends StyledElement<CpuGauge> {
     private final String labelText;
     private Style gaugeStyle = Style.EMPTY;
 
+    private Color labelFgColor = Color.BLACK;
+
     public CpuGauge(double ratio, String labelText) {
         this.ratio = ratio;
         this.labelText = labelText;
@@ -43,7 +45,7 @@ public class CpuGauge extends StyledElement<CpuGauge> {
             String ch = String.valueOf(labelText.charAt(i));
             Color fillColor = gaugeStyle.fg().orElse(Color.GREEN);
             Style charStyle = (labelStart + i) < fillWidth
-                    ? Style.EMPTY.fg(Color.BLACK).bg(fillColor)
+                    ? Style.EMPTY.fg(labelFgColor).bg(fillColor)
                     : Style.EMPTY.fg(Color.WHITE);
             spans[i] = Span.styled(ch, charStyle);
         }
@@ -57,5 +59,10 @@ public class CpuGauge extends StyledElement<CpuGauge> {
                         .build(),
                 area
         );
+    }
+
+    public CpuGauge labelFgColor(Color color) {
+        this.labelFgColor = color;
+        return this;
     }
 }
