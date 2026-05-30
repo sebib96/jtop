@@ -2,6 +2,7 @@ plugins {
     java
     application
     id("org.graalvm.buildtools.native") version "0.10.3"
+    id("com.diffplug.spotless") version "6.25.0"
 }
 
 val mainClassName = "org.jtop.Main"
@@ -40,6 +41,15 @@ tasks.jar {
     }
     from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+spotless {
+    java {
+        eclipse().configFile("eclipse-formatter.xml")
+        removeUnusedImports()
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
 }
 
 graalvmNative {

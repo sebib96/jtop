@@ -9,66 +9,50 @@ import dev.tamboui.toolkit.element.StyledElement;
 import dev.tamboui.widgets.table.Row;
 import dev.tamboui.widgets.table.Table;
 import dev.tamboui.widgets.table.TableState;
+import java.util.ArrayList;
+import java.util.List;
 import org.jtop.model.ProcessInfo;
 import org.jtop.utils.FormatUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-
-
 public class ProcessTable extends StyledElement<ProcessTable> {
-    private final List<ProcessInfo> processes;
-    private final TableState tableState = new TableState();
 
-    public ProcessTable(List<ProcessInfo> processes) {
-        this.processes = processes;
+  private final List<ProcessInfo> processes;
+  private final TableState tableState = new TableState();
+
+  public ProcessTable(List<ProcessInfo> processes) {
+    this.processes = processes;
+  }
+
+  @Override
+  public Size preferredSize(int availableWidth, int availableHeight, RenderContext context) {
+    return Size.of(availableWidth, availableHeight);
+  }
+
+  @Override
+  public void renderContent(Frame frame, Rect area, RenderContext context) {
+    List<Row> rows = new ArrayList<>();
+
+    for (ProcessInfo p : processes) {
+      rows.add(Row.from(String.valueOf(p.pid()), p.user(), String.valueOf(p.priority()),
+          String.valueOf(p.nice()),
+          FormatUtils.bytesToString(p.virtualSize()),
+          FormatUtils.bytesToString(p.residentSetSize()),
+          p.shr() != null ? FormatUtils.bytesToString(p.shr()) : "N/A", String.valueOf(p.state()),
+          String.format("%.1f", p.cpuUsage()), String.format("%.1f", p.memoryUsage()),
+          FormatUtils.cpuTimeToString(p.cpuTime()), p.command()));
     }
 
-    @Override
-    public Size preferredSize(int availableWidth, int availableHeight, RenderContext context) {
-        return Size.of(availableWidth, availableHeight);
-    }
+    Table table = Table.builder()
+        .header(
+            Row.from("PID", "USER", "PRI", "NI", "VIRT", "RES", "SHR", "S", "CPU%", "MEM%", "TIME+",
+                "COMMAND"))
+        .rows(rows)
+        .widths(Constraint.length(6), Constraint.length(10), Constraint.length(4),
+            Constraint.length(4),
+            Constraint.length(7), Constraint.length(7), Constraint.length(7), Constraint.length(2),
+            Constraint.length(6), Constraint.length(6), Constraint.length(9), Constraint.fill())
+        .build();
 
-    @Override
-    public void renderContent(Frame frame, Rect area, RenderContext context) {
-        List<Row> rows = new ArrayList<>();
-
-        for (ProcessInfo p : processes) {
-            rows.add(Row.from(
-                    String.valueOf(p.pid()),
-                    p.user(),
-                    String.valueOf(p.priority()),
-                    String.valueOf(p.nice()),
-                    FormatUtils.bytesToString(p.virtualSize()),
-                    FormatUtils.bytesToString(p.residentSetSize()),
-                    p.shr() != null ? FormatUtils.bytesToString(p.shr()) : "N/A",
-                    String.valueOf(p.state()),
-                    String.format("%.1f", p.cpuUsage()),
-                    String.format("%.1f", p.memoryUsage()),
-                    FormatUtils.cpuTimeToString(p.cpuTime()),
-                    p.command()
-            ));
-        }
-
-        Table table = Table.builder()
-                .header(Row.from("PID", "USER", "PRI", "NI", "VIRT", "RES", "SHR", "S", "CPU%", "MEM%", "TIME+", "COMMAND"))
-                .rows(rows)
-                .widths(
-                        Constraint.length(6),
-                        Constraint.length(10),
-                        Constraint.length(4),
-                        Constraint.length(4),
-                        Constraint.length(7),
-                        Constraint.length(7),
-                        Constraint.length(7),
-                        Constraint.length(2),
-                        Constraint.length(6),
-                        Constraint.length(6),
-                        Constraint.length(9),
-                        Constraint.fill()
-                )
-                .build();
-
-        table.render(area, frame.buffer(), tableState);
-    }
+    table.render(area, frame.buffer(), tableState);
+  }
 }

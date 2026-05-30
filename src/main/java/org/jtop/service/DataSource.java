@@ -4,9 +4,8 @@ import org.jtop.model.SystemSnapshot;
 
 public interface DataSource {
 
-    SystemSnapshot getLatestSnapshot();
+  SystemSnapshot getLatestSnapshot();
 
-    void startPolling();
-
+  void startPolling();
 
 }
