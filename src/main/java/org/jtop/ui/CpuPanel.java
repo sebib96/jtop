@@ -1,9 +1,14 @@
 package org.jtop.ui;
 
+import dev.tamboui.style.Color;
+import dev.tamboui.style.Style;
 import dev.tamboui.toolkit.element.Element;
 import org.jtop.model.SystemSnapshot;
 
-import static dev.tamboui.toolkit.Toolkit.*;
+import static dev.tamboui.toolkit.Toolkit.row;
+import static dev.tamboui.toolkit.Toolkit.text;
+import static dev.tamboui.toolkit.Toolkit.panel;
+import static dev.tamboui.toolkit.Toolkit.column;
 
 public class CpuPanel {
 
@@ -21,7 +26,9 @@ public class CpuPanel {
                     double load = systemSnapshot.cpuLoadPerCore()[coreIndex];
                     slots[c] = row(
                             text(String.format("CPU%02d[", coreIndex + 1)),
-                            gauge(load).label(String.format("%5.1f%%", load * 100)),
+                            new CpuGauge(load, String.format("%5.1f%%", load * 100))
+                                    .gaugeStyle(Style.EMPTY.fg(Color.GREEN))
+                                    .fill(),
                             text("]")
                     );
                 } else {
