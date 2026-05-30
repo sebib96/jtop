@@ -3,5 +3,7 @@ package org.jtop.model;
 public record SystemSnapshot(
         double[] cpuLoadPerCore,
         Double[] cpuTempPerCore,
-        long timestamp
+        long timestamp,
+        MemoryInfo ram,
+        MemoryInfo swap
 ) {}

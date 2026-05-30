@@ -7,6 +7,7 @@ import org.jtop.service.DataSource;
 import org.jtop.service.MockMonitor;
 import org.jtop.service.SystemMonitor;
 import org.jtop.ui.CpuPanel;
+import org.jtop.ui.MemoryPanel;
 
 import java.util.Arrays;
 
@@ -15,6 +16,7 @@ import static dev.tamboui.toolkit.Toolkit.*;
 public class Main extends ToolkitApp {
     private static DataSource dataSource;
     private static CpuPanel cpuPanel;
+    private static MemoryPanel memoryPanel;
 
     @Override
     protected Element render() {
@@ -23,7 +25,10 @@ public class Main extends ToolkitApp {
         if (snapshot == null) {
             return text("Loading...");
         }
-        return cpuPanel.render(snapshot);
+        return column(
+        cpuPanel.render(snapshot),
+        memoryPanel.render(snapshot)
+        );
     }
 
     public static void main(String[] args) throws Exception {
@@ -33,6 +38,7 @@ public class Main extends ToolkitApp {
 
         dataSource.startPolling();
         cpuPanel = new CpuPanel();
+        memoryPanel = new MemoryPanel();
 
         new Main().run();
     }

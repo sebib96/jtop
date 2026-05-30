@@ -1,5 +1,6 @@
 package org.jtop.service;
 
+import org.jtop.model.MemoryInfo;
 import org.jtop.model.SystemSnapshot;
 
 public class MockMonitor implements DataSource {
@@ -18,8 +19,15 @@ public class MockMonitor implements DataSource {
             testCpuLoadPerCore[i] = (double) i / (cores - 1);
         }
 
-        return new SystemSnapshot(testCpuLoadPerCore, null, timestamp);
+        MemoryInfo ram = new MemoryInfo(8L * 1024 * 1024 * 1024, 16L * 1024 * 1024 * 1024);
+        MemoryInfo swap =  new MemoryInfo(512L * 1024 * 1024, 2L * 1024 * 1024 * 1024);
 
+        return new SystemSnapshot(
+                testCpuLoadPerCore,
+                null,
+                timestamp,
+                ram,
+                swap);
     }
 
     @Override
