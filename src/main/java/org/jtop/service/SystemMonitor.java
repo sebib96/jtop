@@ -92,13 +92,18 @@ public class SystemMonitor implements DataSource {
 
         processList.sort((a, b) -> Double.compare(b.cpuUsage(), a.cpuUsage()));
 
+        long uptime = os.getSystemUptime();
+        double[] loadAverage = processor.getSystemLoadAverage(3);
+
         SystemSnapshot updatedSystemSnapshot = new SystemSnapshot(
                 updatedCpuLoadBetweenTicks,
                 null,
                 updatedTimestamp,
                 ram,
                 swap,
-                processList);
+                processList,
+                uptime,
+                loadAverage);
 
         latestSnapshot.set(updatedSystemSnapshot);
     }

@@ -7,6 +7,7 @@ import org.jtop.service.DataSource;
 import org.jtop.service.MockMonitor;
 import org.jtop.service.SystemMonitor;
 import org.jtop.ui.CpuPanel;
+import org.jtop.ui.HeaderPanel;
 import org.jtop.ui.MemoryPanel;
 import org.jtop.ui.ProcessTable;
 
@@ -18,6 +19,7 @@ public class Main extends ToolkitApp {
     private static DataSource dataSource;
     private static CpuPanel cpuPanel;
     private static MemoryPanel memoryPanel;
+    private static HeaderPanel headerPanel;
 
     @Override
     protected Element render() {
@@ -30,7 +32,8 @@ public class Main extends ToolkitApp {
         cpuPanel.render(snapshot),
         row(
                 memoryPanel.render(snapshot),
-                spacer()
+                headerPanel.render(snapshot)
+
         ),
                 panel("PROC", new ProcessTable(snapshot.processes())).rounded().fill()
         ).fill();
@@ -44,6 +47,7 @@ public class Main extends ToolkitApp {
         dataSource.startPolling();
         cpuPanel = new CpuPanel();
         memoryPanel = new MemoryPanel();
+        headerPanel = new HeaderPanel();
 
         new Main().run();
     }

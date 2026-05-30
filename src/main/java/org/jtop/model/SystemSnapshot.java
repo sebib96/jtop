@@ -8,5 +8,7 @@ public record SystemSnapshot(
         long timestamp,
         MemoryInfo ram,
         MemoryInfo swap,
-        List<ProcessInfo> processes
+        List<ProcessInfo> processes,
+        long upTimeSeconds,
+        double[] loadAverage
 ) {}

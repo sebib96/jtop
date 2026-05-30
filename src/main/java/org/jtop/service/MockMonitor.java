@@ -33,13 +33,18 @@ public class MockMonitor implements DataSource {
             new ProcessInfo(3456, "root",  20, 0,   100_000_000L,  10_000_000L,  5_000_000L, 'S',  0.1, 0.1,  300_000L, "sshd")
         );
 
+        long uptime = 3 * 24 * 3600L + 12 * 3600L + 4 * 60L + 22L;
+        double[] loadAverage = {2.4, 1.8, 1.2};
+
         return new SystemSnapshot(
                 testCpuLoadPerCore,
                 null,
                 timestamp,
                 ram,
                 swap,
-                processes);
+                processes,
+                uptime,
+                loadAverage);
     }
 
     @Override
