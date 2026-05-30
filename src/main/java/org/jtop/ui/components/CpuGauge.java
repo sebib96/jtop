@@ -9,6 +9,8 @@ import dev.tamboui.text.Span;
 import dev.tamboui.toolkit.element.RenderContext;
 import dev.tamboui.toolkit.element.Size;
 import dev.tamboui.toolkit.element.StyledElement;
+import dev.tamboui.widgets.block.Block;
+import dev.tamboui.widgets.block.Borders;
 import dev.tamboui.widgets.gauge.Gauge;
 
 public class CpuGauge extends StyledElement<CpuGauge> {
@@ -16,8 +18,8 @@ public class CpuGauge extends StyledElement<CpuGauge> {
   private final double ratio;
   private final String labelText;
   private Style gaugeStyle = Style.EMPTY;
-
   private Color labelFgColor = Color.BLACK;
+  private String title = "";
 
   public CpuGauge(double ratio, String labelText) {
     this.ratio = ratio;
@@ -29,9 +31,20 @@ public class CpuGauge extends StyledElement<CpuGauge> {
     return this;
   }
 
+  public CpuGauge labelFgColor(Color color) {
+    this.labelFgColor = color;
+    return this;
+  }
+
+  public CpuGauge title(String title) {
+    this.title = title;
+    return this;
+  }
+
   @Override
   public Size preferredSize(int availableWidth, int availableHeight, RenderContext context) {
-    return Size.of(labelText.length() + 10, 1);
+    int height = title.isEmpty() ? 1 : 3;
+    return Size.of(labelText.length() + 10, height);
   }
 
   @Override
@@ -51,13 +64,16 @@ public class CpuGauge extends StyledElement<CpuGauge> {
       spans[i] = Span.styled(ch, charStyle);
     }
 
-    frame.renderWidget(
-        Gauge.builder().ratio(ratio).gaugeStyle(gaugeStyle).style(context.currentStyle())
-            .label(Line.from(spans)).build(), area);
-  }
+    Gauge.Builder builder = Gauge.builder()
+        .ratio(ratio)
+        .gaugeStyle(gaugeStyle)
+        .style(context.currentStyle())
+        .label(Line.from(spans));
 
-  public CpuGauge labelFgColor(Color color) {
-    this.labelFgColor = color;
-    return this;
+    if (!title.isEmpty()) {
+      builder = builder.block(Block.builder().borders(Borders.ALL).title(title).build());
+    }
+
+    frame.renderWidget(builder.build(), area);
   }
 }
