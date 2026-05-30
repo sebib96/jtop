@@ -23,17 +23,21 @@ public class MemoryPanel {
     MemoryInfo swap = systemSnapshot.swap();
     Element[] rowElements = new Element[2];
 
-    rowElements[0] = row(text("RAM["),
-        new CpuGauge(((double) ram.used() / ram.total()),
+    rowElements[0] = row(
+        text("RAM|"),
+        new CpuGauge((double) ram.used() / ram.total(),
             bytesToString(ram.used()) + "/" + bytesToString(ram.total()))
-            .gaugeStyle(Style.EMPTY.fg(Color.GREEN)).fill(),
-        text("]"));
+            .gaugeStyle(Style.EMPTY.fg(Color.GREEN))
+            .fill(),
+        text("|"));
 
-    rowElements[1] = row(text("SWP["),
-        new CpuGauge(((double) swap.used() / swap.total()),
+    rowElements[1] = row(
+        text("SWP|"),
+        new CpuGauge((double) swap.used() / swap.total(),
             bytesToString(swap.used()) + "/" + bytesToString(swap.total()))
-            .gaugeStyle(Style.EMPTY.fg(Color.BLUE)).fill(),
-        text("]"));
+            .gaugeStyle(Style.EMPTY.fg(Color.BLUE))
+            .fill(),
+        text("|"));
 
     return panel("MEM", column(rowElements)).rounded().percent(MEM_PANEL_WIDTH_PERCENT)
         .padding(new Padding(0, 1, 0, 1));

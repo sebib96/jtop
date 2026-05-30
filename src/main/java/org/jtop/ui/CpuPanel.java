@@ -31,11 +31,12 @@ public class CpuPanel {
         if (coreIndex < cores) {
           double load = systemSnapshot.cpuLoadPerCore()[coreIndex];
           Color fill = loadColor(load);
-          slots[c] = new CpuGauge(load, String.format("%5.1f%%", load * 100))
-              .title(String.format("CPU%02d", coreIndex + 1))
-              .gaugeStyle(Style.EMPTY.fg(fill))
-              .labelFgColor(labelColor(fill))
-              .fill();
+          slots[c] = row(text(String.format("CPU%02d|", coreIndex + 1)),
+              new CpuGauge(load, String.format("%5.1f%%", load * 100))
+                  .gaugeStyle(Style.EMPTY.fg(fill))
+                  .labelFgColor(labelColor(fill))
+                  .fill(),
+              text("| "));
         } else {
           slots[c] = text("");
         }

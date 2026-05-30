@@ -7,7 +7,7 @@ import static dev.tamboui.toolkit.Toolkit.text;
 
 import dev.tamboui.layout.Padding;
 import dev.tamboui.toolkit.element.Element;
-import java.time.LocalDateTime;
+
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import org.jtop.model.SystemSnapshot;
