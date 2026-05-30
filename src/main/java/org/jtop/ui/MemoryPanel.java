@@ -8,6 +8,7 @@ import org.jtop.model.SystemSnapshot;
 import org.jtop.ui.components.CpuGauge;
 
 import static dev.tamboui.toolkit.Toolkit.*;
+import static org.jtop.utils.FormatUtils.bytesToString;
 
 public class MemoryPanel {
 
@@ -37,17 +38,5 @@ public class MemoryPanel {
                 text("]"));
 
         return panel("MEM", column(rowElements)).rounded().percent(MEM_PANEL_WIDTH_PERCENT);
-    }
-
-    private String bytesToString(long bytes){
-        long GB = 1024L * 1024 * 1024;
-        long MB = 1024L * 1024;
-        if (bytes >= GB) {
-            return String.format("%.1fG", (double) bytes / GB);
-        } else if (bytes >= MB) {
-            return String.format("%.1fM", (double) bytes / MB);
-        } else {
-            return String.format("%dK", bytes / 1024);
-        }
     }
 }

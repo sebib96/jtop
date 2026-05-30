@@ -8,6 +8,7 @@ import org.jtop.service.MockMonitor;
 import org.jtop.service.SystemMonitor;
 import org.jtop.ui.CpuPanel;
 import org.jtop.ui.MemoryPanel;
+import org.jtop.ui.ProcessTable;
 
 import java.util.Arrays;
 
@@ -30,8 +31,9 @@ public class Main extends ToolkitApp {
         row(
                 memoryPanel.render(snapshot),
                 spacer()
-        )
-        );
+        ),
+                panel("PROC", new ProcessTable(snapshot.processes())).rounded().fill()
+        ).fill();
     }
 
     public static void main(String[] args) throws Exception {
