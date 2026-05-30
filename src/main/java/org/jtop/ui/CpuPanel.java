@@ -4,6 +4,7 @@ import dev.tamboui.style.Color;
 import dev.tamboui.style.Style;
 import dev.tamboui.toolkit.element.Element;
 import org.jtop.model.SystemSnapshot;
+import org.jtop.ui.components.CpuGauge;
 
 import static dev.tamboui.toolkit.Toolkit.row;
 import static dev.tamboui.toolkit.Toolkit.text;
@@ -13,6 +14,8 @@ import static dev.tamboui.toolkit.Toolkit.column;
 public class CpuPanel {
 
     private static final int MAX_CORES_PER_ROW = 8;
+    private static final Color YELLOW = Color.rgb(255, 215, 0);
+    private static final Color ORANGE = Color.rgb(255, 140, 0);
 
     public Element render(SystemSnapshot systemSnapshot) {
         int cores = systemSnapshot.cpuLoadPerCore().length;
@@ -29,7 +32,7 @@ public class CpuPanel {
                     slots[c] = row(
                             text(String.format("CPU%02d[", coreIndex + 1)),
                             new CpuGauge(load, String.format("%5.1f%%", load * 100))
-                                    .gaugeStyle(Style.EMPTY.fg(Color.GREEN))
+                                    .gaugeStyle(Style.EMPTY.fg(loadColor(load)))
                                     .fill(),
                             text("]")
                     );
@@ -41,6 +44,13 @@ public class CpuPanel {
         }
 
         return panel("CPU", column(rowElements)).rounded();
+    }
+
+    private Color loadColor(double load) {
+        if (load < 0.25) return Color.GREEN;
+        if (load < 0.50) return YELLOW;
+        if (load < 0.75) return ORANGE;
+        return Color.RED;
     }
 
 }

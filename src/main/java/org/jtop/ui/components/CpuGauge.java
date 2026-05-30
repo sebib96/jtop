@@ -1,4 +1,4 @@
-package org.jtop.ui;
+package org.jtop.ui.components;
 
 import dev.tamboui.layout.Rect;
 import dev.tamboui.style.Color;
@@ -41,8 +41,9 @@ public class CpuGauge extends StyledElement<CpuGauge> {
 
         for (int i = 0; i < labelText.length(); i++) {
             String ch = String.valueOf(labelText.charAt(i));
+            Color fillColor = gaugeStyle.fg().orElse(Color.GREEN);
             Style charStyle = (labelStart + i) < fillWidth
-                    ? Style.EMPTY.fg(Color.BLACK).bg(Color.GREEN)
+                    ? Style.EMPTY.fg(Color.BLACK).bg(fillColor)
                     : Style.EMPTY.fg(Color.WHITE);
             spans[i] = Span.styled(ch, charStyle);
         }

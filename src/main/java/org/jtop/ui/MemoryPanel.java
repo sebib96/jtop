@@ -5,6 +5,7 @@ import dev.tamboui.style.Style;
 import dev.tamboui.toolkit.element.Element;
 import org.jtop.model.MemoryInfo;
 import org.jtop.model.SystemSnapshot;
+import org.jtop.ui.components.CpuGauge;
 
 import static dev.tamboui.toolkit.Toolkit.*;
 
