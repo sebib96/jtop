@@ -7,7 +7,7 @@ import org.jtop.model.SystemSnapshot;
 
 public class DiskPanel {
 
-  public Element render(SystemSnapshot snapshot) {
-    return panel("DISK", new DiskTable(snapshot.diskInfos())).rounded().fill();
-  }
+	public Element render(SystemSnapshot snapshot) {
+		return panel("DISK", new DiskTable(snapshot.diskInfos())).rounded().fill();
+	}
 }

@@ -16,26 +16,29 @@ import org.jtop.ui.components.CpuGauge;
 
 public class MemoryPanel {
 
-    private static final int MEM_PANEL_WIDTH_PERCENT = 35;
+	private static final int MEM_PANEL_WIDTH_PERCENT = 35;
 
-    public Element render(SystemSnapshot systemSnapshot) {
-        MemoryInfo ram = systemSnapshot.ram();
-        MemoryInfo swap = systemSnapshot.swap();
-        Element[] rowElements = new Element[2];
+	public Element render(SystemSnapshot systemSnapshot) {
+		MemoryInfo ram = systemSnapshot.ram();
+		MemoryInfo swap = systemSnapshot.swap();
+		Element[] rowElements = new Element[2];
 
-        rowElements[0] = row(text("RAM|"),
-            new CpuGauge((double) ram.used() / ram.total(),
-                bytesToString(ram.used()) + "/" + bytesToString(ram.total())).gaugeStyle(Style.EMPTY.fg(Color.GREEN))
-                .fill(),
-            text("|"));
+		rowElements[0] = row(
+				text("RAM|"), new CpuGauge(
+						(double) ram.used() / ram.total(),
+						bytesToString(ram.used()) + "/" + bytesToString(ram.total())
+				).gaugeStyle(Style.EMPTY.fg(Color.GREEN)).fill(), text("|")
+		);
 
-        rowElements[1] = row(text("SWP|"),
-            new CpuGauge((double) swap.used() / swap.total(),
-                bytesToString(swap.used()) + "/" + bytesToString(swap.total())).gaugeStyle(Style.EMPTY.fg(Color.BLUE))
-                .fill(),
-            text("|"));
+		rowElements[1] = row(
+				text("SWP|"), new CpuGauge(
+						(double) swap.used() / swap.total(),
+						bytesToString(swap.used()) + "/" + bytesToString(swap.total())
+				).gaugeStyle(Style.EMPTY.fg(Color.BLUE)).fill(), text("|")
+		);
 
-        return panel("MEM", column(rowElements)).rounded().percent(MEM_PANEL_WIDTH_PERCENT)
-            .padding(new Padding(0, 1, 0, 1));
-    }
+		return panel("MEM", column(rowElements)).rounded()
+		                                        .percent(MEM_PANEL_WIDTH_PERCENT)
+		                                        .padding(new Padding(0, 1, 0, 1));
+	}
 }
