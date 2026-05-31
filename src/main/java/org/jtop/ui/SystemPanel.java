@@ -23,8 +23,16 @@ public class SystemPanel {
         String date = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z"));
 
         return panel("SYS",
-            row(column(text("OS: " + osInfo), text("ARCH: " + architecture + "-bit")),
-                column(text("  HOST: " + hostname), text("  DATE: " + date))))
-            .rounded().padding(new Padding(0, 1, 0, 1));
+            row(
+                column(
+                    text("OS: " + osInfo),
+                    text("ARCH: " + architecture + "-bit")
+                ),
+                column(
+                    text("  HOST: " + hostname),
+                    text("  DATE: " + date)
+                )
+            )
+        ).rounded().padding(new Padding(0, 1, 0, 1));
     }
 }

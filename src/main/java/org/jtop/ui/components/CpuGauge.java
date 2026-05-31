@@ -55,7 +55,13 @@ public class CpuGauge extends StyledElement<CpuGauge> {
             spans[i] = Span.styled(ch, charStyle);
         }
 
-        frame.renderWidget(Gauge.builder().ratio(ratio).gaugeStyle(gaugeStyle).style(context.currentStyle())
-            .label(Line.from(spans)).build(), area);
+        frame.renderWidget(
+            Gauge.builder()
+                .ratio(ratio)
+                .gaugeStyle(gaugeStyle)
+                .style(context.currentStyle())
+                .label(Line.from(spans)).build(),
+            area
+        );
     }
 }

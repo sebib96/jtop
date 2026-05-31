@@ -9,6 +9,7 @@ import dev.tamboui.layout.Padding;
 import dev.tamboui.style.Color;
 import dev.tamboui.style.Style;
 import dev.tamboui.toolkit.element.Element;
+import dev.tamboui.widgets.table.Row;
 import org.jtop.model.SystemSnapshot;
 import org.jtop.ui.components.CpuGauge;
 
@@ -42,7 +43,7 @@ public class CpuPanel {
             rowElements[r] = row(slots);
         }
 
-        return panel("CPU", column(rowElements)).rounded().padding(new Padding(0, 1, 0, 1));
+        return panel("CPU", column(rowElements)).rounded().bold().padding(new Padding(0, 1, 0, 1));
     }
 
     private Color loadColor(double load) {
