@@ -45,7 +45,6 @@ tasks.jar {
 
 spotless {
     java {
-        eclipse().configFile("eclipse-formatter.xml")
         removeUnusedImports()
         trimTrailingWhitespace()
         endWithNewline()
