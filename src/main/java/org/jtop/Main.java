@@ -22,9 +22,9 @@ import org.jtop.ui.FooterPanel;
 import org.jtop.ui.HeaderPanel;
 import org.jtop.ui.MemoryPanel;
 import org.jtop.ui.NetPanel;
-import org.jtop.ui.ProcessTable;
+import org.jtop.ui.components.ProcessTable;
 import org.jtop.ui.SystemPanel;
-import org.jtop.ui.TabBar;
+import org.jtop.ui.components.TabBar;
 
 public class Main
 		extends ToolkitApp {

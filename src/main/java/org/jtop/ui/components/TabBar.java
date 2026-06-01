@@ -1,4 +1,4 @@
-package org.jtop.ui;
+package org.jtop.ui.components;
 
 import dev.tamboui.layout.Rect;
 import dev.tamboui.style.Color;

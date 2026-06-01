@@ -12,6 +12,7 @@ import dev.tamboui.widgets.form.BooleanFieldState;
 import java.util.List;
 import org.jtop.model.NetworkInfo;
 import org.jtop.model.SystemSnapshot;
+import org.jtop.ui.components.NetworkTable;
 
 public class NetPanel {
 

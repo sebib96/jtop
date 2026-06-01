@@ -4,6 +4,7 @@ import static dev.tamboui.toolkit.Toolkit.panel;
 
 import dev.tamboui.toolkit.element.Element;
 import org.jtop.model.SystemSnapshot;
+import org.jtop.ui.components.DiskTable;
 
 public class DiskPanel {
 
