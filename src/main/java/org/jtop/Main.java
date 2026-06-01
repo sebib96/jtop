@@ -18,6 +18,7 @@ import org.jtop.service.MockMonitor;
 import org.jtop.service.SystemMonitor;
 import org.jtop.ui.CpuPanel;
 import org.jtop.ui.DiskPanel;
+import org.jtop.ui.FooterPanel;
 import org.jtop.ui.HeaderPanel;
 import org.jtop.ui.MemoryPanel;
 import org.jtop.ui.NetPanel;
@@ -35,6 +36,7 @@ public class Main
 	private static SystemPanel systemPanel;
 	private static DiskPanel diskPanel;
 	private static NetPanel netPanel;
+	private static FooterPanel footerPanel;
 	private final TabsState tabsState = new TabsState(0);
 	private boolean ioProcessView = false;
 
@@ -55,11 +57,16 @@ public class Main
 		};
 
 		Column mainContent = column(
-				cpuPanel.render(snapshot), row(
+				cpuPanel.render(snapshot),
+				row(
 						memoryPanel.render(snapshot),
 						spacer(),
-						row(headerPanel.render(snapshot), systemPanel.render(snapshot))
-				), new TabBar(tabsState), tabContent
+						row(
+								headerPanel.render(snapshot),
+								systemPanel.render(snapshot)
+						)
+				), new TabBar(tabsState), tabContent,
+				footerPanel.render(selected, ioProcessView)
 		).fill();
 
 		return mainContent.onKeyEvent(event -> {
@@ -95,6 +102,7 @@ public class Main
 		systemPanel = new SystemPanel();
 		diskPanel = new DiskPanel();
 		netPanel = new NetPanel();
+		footerPanel = new FooterPanel();
 
 		new Main().run();
 	}
