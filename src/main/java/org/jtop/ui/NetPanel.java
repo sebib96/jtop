@@ -6,6 +6,8 @@ import static dev.tamboui.toolkit.Toolkit.panel;
 import static dev.tamboui.toolkit.Toolkit.row;
 
 import dev.tamboui.toolkit.element.Element;
+import dev.tamboui.toolkit.elements.Column;
+import dev.tamboui.toolkit.event.EventResult;
 import dev.tamboui.widgets.form.BooleanFieldState;
 import java.util.List;
 import org.jtop.model.NetworkInfo;
@@ -28,7 +30,7 @@ public class NetPanel {
 			default -> true;
 		}).toList();
 
-		return column(
+		Column netColumn = column(
 				row(
 						formField("PHYSICAL", showPhysical),
 						formField("LOOPBACK", showLoopback),
@@ -36,5 +38,25 @@ public class NetPanel {
 						formField("VPN", showVPN)
 				), panel("NET", new NetworkTable(filtered)).rounded().fill()
 		).fill();
+
+		return netColumn.onKeyEvent(event -> {
+			if (event.isChar('p')) {
+				showPhysical.toggle();
+				return EventResult.HANDLED;
+			}
+			if (event.isChar('l')) {
+				showLoopback.toggle();
+				return EventResult.HANDLED;
+			}
+			if (event.isChar('v')) {
+				showVirtual.toggle();
+				return EventResult.HANDLED;
+			}
+			if (event.isChar('n')) {
+				showVPN.toggle();
+				return EventResult.HANDLED;
+			}
+			return EventResult.UNHANDLED;
+		});
 	}
 }

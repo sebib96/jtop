@@ -48,7 +48,7 @@ public class NetworkTable
 		}
 
 		int fillWidth = Math.max(7, area.width() - (10 + 10 + 10 + 10 + 10));
-		Table table = Table.builder().columnSpacing(0).header(Row.from(
+		Table table = Table.builder().columnSpacing(2).header(Row.from(
 				headerCell("NAME", 10),
 				headerCell("TYPE", 10),
 				headerCell("RECV/s", 10),

@@ -8,6 +8,7 @@ import static dev.tamboui.toolkit.Toolkit.text;
 
 import dev.tamboui.toolkit.app.ToolkitApp;
 import dev.tamboui.toolkit.element.Element;
+import dev.tamboui.toolkit.elements.Column;
 import dev.tamboui.toolkit.event.EventResult;
 import dev.tamboui.widgets.tabs.TabsState;
 import java.util.Arrays;
@@ -53,7 +54,7 @@ public class Main
 					panel("PROC", new ProcessTable(snapshot.processes(), ioProcessView)).rounded().fill();
 		};
 
-		var mainContent = column(
+		Column mainContent = column(
 				cpuPanel.render(snapshot), row(
 						memoryPanel.render(snapshot),
 						spacer(),

@@ -76,7 +76,7 @@ public class ProcessTable
 		Table table;
 		if (ioView) {
 			int fillWidth = Math.max(7, area.width() - (7 + 11 + 12 + 12 + 2 + 6 + 6));
-			table = Table.builder().columnSpacing(0).header(Row.from(
+			table = Table.builder().columnSpacing(2).header(Row.from(
 					headerCell("PID", 7),
 					headerCell("USER", 11),
 					headerCell("DISK READ", 12),
@@ -97,7 +97,7 @@ public class ProcessTable
 			).build();
 		} else {
 			int fillWidth = Math.max(7, area.width() - (7 + 11 + 5 + 5 + 8 + 8 + 8 + 3 + 7 + 7 + 10));
-			table = Table.builder().columnSpacing(0).header(Row.from(
+			table = Table.builder().columnSpacing(2).header(Row.from(
 					headerCell("PID", 7),
 					headerCell("USER", 11),
 					headerCell("PRI", 5),
