@@ -63,9 +63,9 @@ public class FooterPanel {
 									text("[q] Quit")
 											.style(Style.EMPTY.fg(Color.WHITE).bg(Color.DARK_GRAY))
 							)
-							)
+							).bg(Color.DARK_GRAY)
 					)
-			).bg(Color.DARK_GRAY);
+			);
 		}
 		return text("");
 	}
