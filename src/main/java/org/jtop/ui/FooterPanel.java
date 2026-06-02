@@ -2,6 +2,8 @@ package org.jtop.ui;
 
 import static dev.tamboui.toolkit.Toolkit.column;
 import static dev.tamboui.toolkit.Toolkit.panel;
+import static dev.tamboui.toolkit.Toolkit.row;
+import static dev.tamboui.toolkit.Toolkit.spacer;
 import static dev.tamboui.toolkit.Toolkit.text;
 
 import dev.tamboui.style.Color;
@@ -16,17 +18,35 @@ public class FooterPanel {
 	public Element render(int activeTab, boolean ioView) {
 		if (activeTab == PROC_TAB_INDEX) {
 			if (!ioView) {
-			return panel(
-					"CONTROLS",
-					column(
-							text("[i] Toggle I/O view").style(Style.EMPTY.fg(Color.WHITE).bg(Color.DARK_GRAY))
-					)
-			);
+				return panel(
+						"CONTROLS",
+						column(
+								row(
+										text("[i] Toggle I/O view")
+												.style(Style.EMPTY.fg(Color.WHITE).bg(Color.DARK_GRAY)
+												),
+										spacer(),
+										row(
+												text("[q] Quit")
+														.style(Style.EMPTY.fg(Color.WHITE).bg(Color.DARK_GRAY))
+										)
+								).bg(Color.DARK_GRAY)
+						)
+				);
 			} else  {
 				return panel(
 						"CONTROLS",
 						column(
-								text("[i] Toggle CPU view").style(Style.EMPTY.fg(Color.WHITE).bg(Color.DARK_GRAY))
+								row(
+								text("[i] Toggle CPU view")
+										.style(Style.EMPTY.fg(Color.WHITE).bg(Color.DARK_GRAY)
+										),
+								spacer(),
+								row(
+										text("[q] Quit")
+												.style(Style.EMPTY.fg(Color.WHITE).bg(Color.DARK_GRAY))
+								)
+								).bg(Color.DARK_GRAY)
 						)
 				);
 			}
@@ -34,11 +54,18 @@ public class FooterPanel {
 			return panel(
 					"CONTROLS",
 					column(
-							text("[p]Physical  [l]Loopback  [v]Virtual  [n]VPN").style(
-									Style.EMPTY.fg(Color.WHITE).bg(Color.DARK_GRAY)
+							row(
+							text("[p]Physical  [l]Loopback  [v]Virtual  [n]VPN")
+									.style(Style.EMPTY.fg(Color.WHITE).bg(Color.DARK_GRAY)
+							),
+							spacer(),
+							row(
+									text("[q] Quit")
+											.style(Style.EMPTY.fg(Color.WHITE).bg(Color.DARK_GRAY))
+							)
 							)
 					)
-			);
+			).bg(Color.DARK_GRAY);
 		}
 		return text("");
 	}
