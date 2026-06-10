@@ -37,6 +37,7 @@ public class Main
 	private static DiskPanel diskPanel;
 	private static NetPanel netPanel;
 	private static FooterPanel footerPanel;
+	private static ProcessTable processTable;
 	private final TabsState tabsState = new TabsState(0);
 	private boolean ioProcessView = false;
 
@@ -49,11 +50,11 @@ public class Main
 		}
 
 		int selected = tabsState.selected() != null ? tabsState.selected() : 0;
+		processTable.update(snapshot.processes(), ioProcessView);
 		Element tabContent = switch (selected) {
 			case 1 -> diskPanel.render(snapshot);
 			case 2 -> netPanel.render(snapshot);
-			default ->
-					panel("PROC", new ProcessTable(snapshot.processes(), ioProcessView)).rounded().fill();
+			default -> panel("PROC", processTable).rounded().fill();
 		};
 
 		Column mainContent = column(
@@ -86,6 +87,18 @@ public class Main
 				ioProcessView = !ioProcessView;
 				return EventResult.HANDLED;
 			}
+			if (event.isUp()) {
+				processTable.navigateUp();
+				return EventResult.HANDLED;
+			}
+			if (event.isDown()) {
+				processTable.navigateDown();
+				return EventResult.HANDLED;
+			}
+			if (event.isCancel()) {
+				processTable.deselect();
+				return EventResult.HANDLED;
+			}
 			return EventResult.UNHANDLED;
 		});
 	}
@@ -103,6 +116,7 @@ public class Main
 		diskPanel = new DiskPanel();
 		netPanel = new NetPanel();
 		footerPanel = new FooterPanel();
+		processTable = new ProcessTable();
 
 		new Main().run();
 	}

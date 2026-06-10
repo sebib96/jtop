@@ -20,13 +20,30 @@ import org.jtop.utils.FormatUtils;
 public class ProcessTable
 		extends StyledElement<ProcessTable> {
 
-	private final List<ProcessInfo> processes;
-	private final boolean ioView;
+	private static final Style HEADER_STYLE = Style.EMPTY.bold().bg(Color.DARK_GRAY).fg(Color.WHITE);
+	private static final Style HIGHLIGHT_STYLE = Style.EMPTY.bg(Color.CYAN).fg(Color.BLACK);
+
+	private List<ProcessInfo> processes = List.of();
+	private boolean ioView;
 	private final TableState tableState = new TableState();
 
-	public ProcessTable(List<ProcessInfo> processes, boolean ioView) {
+	public void update(List<ProcessInfo> processes, boolean ioView) {
+		if (tableState.selected() != null) return;
 		this.processes = processes;
 		this.ioView = ioView;
+	}
+
+	public void navigateUp() {
+		if (tableState.selected() == null) return;
+		tableState.selectPrevious();
+	}
+
+	public void navigateDown() {
+		if (tableState.selected() == null) {
+			tableState.select(0);
+		} else {
+			tableState.selectNext(processes.size());
+		}
 	}
 
 	@Override
@@ -36,13 +53,14 @@ public class ProcessTable
 
 	@Override
 	public void renderContent(Frame frame, Rect area, RenderContext context) {
+		List<ProcessInfo> sorted = (ioView && tableState.selected() == null)
+				? processes.stream().sorted((a, b) -> Long.compare(
+						b.diskReadBytesPerSec() + b.diskWriteBytesPerSec(),
+						a.diskReadBytesPerSec() + a.diskWriteBytesPerSec()
+				)).toList()
+				: processes;
+
 		List<Row> rows = new ArrayList<>();
-
-		List<ProcessInfo> sorted = ioView ? processes.stream().sorted((a, b) -> Long.compare(
-				b.diskReadBytesPerSec() + b.diskWriteBytesPerSec(),
-				a.diskReadBytesPerSec() + a.diskWriteBytesPerSec()
-		)).toList() : processes;
-
 		for (ProcessInfo p : sorted) {
 			if (ioView) {
 				rows.add(Row.from(
@@ -76,54 +94,64 @@ public class ProcessTable
 		Table table;
 		if (ioView) {
 			int fillWidth = Math.max(7, area.width() - (7 + 11 + 12 + 12 + 2 + 6 + 6));
-			table = Table.builder().columnSpacing(2).header(Row.from(
-					headerCell("PID", 7),
-					headerCell("USER", 11),
-					headerCell("DISK READ", 12),
-					headerCell("DISK WRITE", 12),
-					headerCell("S", 2),
-					headerCell("CPU%", 6),
-					headerCell("MEM%", 6),
-					headerCell("COMMAND", fillWidth)
-			).style(Style.EMPTY.bg(Color.DARK_GRAY))).rows(rows).widths(
-					Constraint.length(7),
-					Constraint.length(11),
-					Constraint.length(12),
-					Constraint.length(12),
-					Constraint.length(2),
-					Constraint.length(6),
-					Constraint.length(6),
-					Constraint.fill()
-			).build();
+			table = Table.builder().columnSpacing(2)
+					.highlightStyle(HIGHLIGHT_STYLE)
+					.highlightSymbol("")
+					.header(Row.from(
+							headerCell("PID", 7),
+							headerCell("USER", 11),
+							headerCell("DISK READ", 12),
+							headerCell("DISK WRITE", 12),
+							headerCell("S", 2),
+							headerCell("CPU%", 6),
+							headerCell("MEM%", 6),
+							headerCell("COMMAND", fillWidth)
+					).style(Style.EMPTY.bg(Color.DARK_GRAY)))
+					.rows(rows)
+					.widths(
+							Constraint.length(7),
+							Constraint.length(11),
+							Constraint.length(12),
+							Constraint.length(12),
+							Constraint.length(2),
+							Constraint.length(6),
+							Constraint.length(6),
+							Constraint.fill()
+					).build();
 		} else {
 			int fillWidth = Math.max(7, area.width() - (7 + 11 + 5 + 5 + 8 + 8 + 8 + 3 + 7 + 7 + 10));
-			table = Table.builder().columnSpacing(2).header(Row.from(
-					headerCell("PID", 7),
-					headerCell("USER", 11),
-					headerCell("PRI", 5),
-					headerCell("NI", 5),
-					headerCell("VIRT", 8),
-					headerCell("RES", 8),
-					headerCell("SHR", 8),
-					headerCell("S", 3),
-					headerCell("CPU%", 7),
-					headerCell("MEM%", 7),
-					headerCell("TIME+", 10),
-					headerCell("COMMAND", fillWidth)
-			).style(Style.EMPTY.bg(Color.DARK_GRAY))).rows(rows).widths(
-					Constraint.length(7),
-					Constraint.length(11),
-					Constraint.length(5),
-					Constraint.length(5),
-					Constraint.length(8),
-					Constraint.length(8),
-					Constraint.length(8),
-					Constraint.length(3),
-					Constraint.length(7),
-					Constraint.length(7),
-					Constraint.length(10),
-					Constraint.fill()
-			).build();
+			table = Table.builder().columnSpacing(2)
+					.highlightStyle(HIGHLIGHT_STYLE)
+					.highlightSymbol("")
+					.header(Row.from(
+							headerCell("PID", 7),
+							headerCell("USER", 11),
+							headerCell("PRI", 5),
+							headerCell("NI", 5),
+							headerCell("VIRT", 8),
+							headerCell("RES", 8),
+							headerCell("SHR", 8),
+							headerCell("S", 3),
+							headerCell("CPU%", 7),
+							headerCell("MEM%", 7),
+							headerCell("TIME+", 10),
+							headerCell("COMMAND", fillWidth)
+					).style(Style.EMPTY.bg(Color.DARK_GRAY)))
+					.rows(rows)
+					.widths(
+							Constraint.length(7),
+							Constraint.length(11),
+							Constraint.length(5),
+							Constraint.length(5),
+							Constraint.length(8),
+							Constraint.length(8),
+							Constraint.length(8),
+							Constraint.length(3),
+							Constraint.length(7),
+							Constraint.length(7),
+							Constraint.length(10),
+							Constraint.fill()
+					).build();
 		}
 
 		table.render(area, frame.buffer(), tableState);
@@ -131,6 +159,10 @@ public class ProcessTable
 
 	private static Cell headerCell(String text, int width) {
 		String padded = String.format("%-" + width + "s", text);
-		return Cell.from(padded).style(Style.EMPTY.bold().bg(Color.DARK_GRAY).fg(Color.WHITE));
+		return Cell.from(padded).style(HEADER_STYLE);
+	}
+
+	public void deselect() {
+		tableState.clearSelection();
 	}
 }
