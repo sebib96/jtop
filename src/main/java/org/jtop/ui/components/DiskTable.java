@@ -20,11 +20,25 @@ import org.jtop.utils.FormatUtils;
 public class DiskTable
 		extends StyledElement<DiskTable> {
 
-	private final List<DiskInfo> disks;
+	private List<DiskInfo> disks = List.of();
 	private final TableState tableState = new TableState();
 
-	public DiskTable(List<DiskInfo> disks) {
+	public void update(List<DiskInfo> disks) {
+		if (tableState.selected() != null) return;
 		this.disks = disks;
+	}
+
+	public void navigateUp() {
+		if (tableState.selected() == null) return;
+		tableState.selectPrevious();
+	}
+
+	public void navigateDown() {
+		if (tableState.selected() == null) {
+			tableState.select(0);
+		} else {
+			tableState.selectNext(disks.size());
+		}
 	}
 
 	@Override
@@ -47,7 +61,10 @@ public class DiskTable
 		}
 
 		int fillWidth = Math.max(7, area.width() - (12 + 10 + 10 + 10));
-		Table table = Table.builder().columnSpacing(2).header(Row.from(
+		Table table = Table.builder().columnSpacing(2)
+				.highlightStyle(Style.EMPTY.bg(Color.CYAN).fg(Color.BLACK))
+				.highlightSymbol("")
+				.header(Row.from(
 				headerCell("NAME", 12),
 				headerCell("READ/s", 10),
 				headerCell("WRITE/s", 10),
@@ -67,5 +84,9 @@ public class DiskTable
 	private static Cell headerCell(String text, int width) {
 		String padded = String.format("%-" + width + "s", text);
 		return Cell.from(padded).style(Style.EMPTY.bold().bg(Color.DARK_GRAY).fg(Color.WHITE));
+	}
+
+	public void deselect() {
+		tableState.clearSelection();
 	}
 }

@@ -20,11 +20,29 @@ import org.jtop.utils.FormatUtils;
 public class NetworkTable
 		extends StyledElement<NetworkTable> {
 
-	private final List<NetworkInfo> interfaces;
+	private List<NetworkInfo> interfaces = List.of();
 	private final TableState tableState = new TableState();
 
-	public NetworkTable(List<NetworkInfo> interfaces) {
+	public void update(List<NetworkInfo> interfaces) {
+		if (tableState.selected() != null) return;
 		this.interfaces = interfaces;
+	}
+
+	public void navigateUp() {
+		if (tableState.selected() == null) return;
+		tableState.selectPrevious();
+	}
+
+	public void navigateDown() {
+		if (tableState.selected() == null) {
+			tableState.select(0);
+		} else {
+			tableState.selectNext(interfaces.size());
+		}
+	}
+
+	public void deselect() {
+		tableState.clearSelection();
 	}
 
 	@Override
@@ -48,7 +66,10 @@ public class NetworkTable
 		}
 
 		int fillWidth = Math.max(7, area.width() - (10 + 10 + 10 + 10 + 10));
-		Table table = Table.builder().columnSpacing(2).header(Row.from(
+		Table table = Table.builder().columnSpacing(2)
+				.highlightStyle(Style.EMPTY.bg(Color.CYAN).fg(Color.BLACK))
+				.highlightSymbol("")
+				.header(Row.from(
 				headerCell("NAME", 10),
 				headerCell("TYPE", 10),
 				headerCell("RECV/s", 10),

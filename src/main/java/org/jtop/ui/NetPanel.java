@@ -21,6 +21,9 @@ public class NetPanel {
 	private final BooleanFieldState showVirtual = new BooleanFieldState(false);
 	private final BooleanFieldState showVPN = new BooleanFieldState(true);
 
+	private final NetworkTable networkTable = new NetworkTable();
+
+
 	public Element render(SystemSnapshot snapshot) {
 		List<NetworkInfo> filtered =
 				snapshot.networkInfos().stream().filter(n -> switch (n.type()) {
@@ -31,13 +34,14 @@ public class NetPanel {
 			default -> true;
 		}).toList();
 
+		networkTable.update(filtered);
 		Column netColumn = column(
 				row(
 						formField("PHYSICAL", showPhysical),
 						formField("LOOPBACK", showLoopback),
 						formField("VIRTUAL", showVirtual),
 						formField("VPN", showVPN)
-				), panel("NET", new NetworkTable(filtered)).rounded().fill()
+				), panel("NET", networkTable).rounded().fill()
 		).fill();
 
 		return netColumn.onKeyEvent(event -> {
@@ -60,4 +64,8 @@ public class NetPanel {
 			return EventResult.UNHANDLED;
 		});
 	}
+
+	public void navigateUp()   { networkTable.navigateUp(); }
+	public void navigateDown() { networkTable.navigateDown(); }
+	public void deselect()     { networkTable.deselect(); }
 }

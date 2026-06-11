@@ -17,11 +17,11 @@ import org.jtop.service.DataSource;
 import org.jtop.service.MockMonitor;
 import org.jtop.service.SystemMonitor;
 import org.jtop.ui.CpuPanel;
-import org.jtop.ui.DiskPanel;
 import org.jtop.ui.FooterPanel;
 import org.jtop.ui.HeaderPanel;
 import org.jtop.ui.MemoryPanel;
 import org.jtop.ui.NetPanel;
+import org.jtop.ui.components.DiskTable;
 import org.jtop.ui.components.ProcessTable;
 import org.jtop.ui.SystemPanel;
 import org.jtop.ui.components.TabBar;
@@ -34,7 +34,7 @@ public class Main
 	private static MemoryPanel memoryPanel;
 	private static HeaderPanel headerPanel;
 	private static SystemPanel systemPanel;
-	private static DiskPanel diskPanel;
+	private static DiskTable diskTable;
 	private static NetPanel netPanel;
 	private static FooterPanel footerPanel;
 	private static ProcessTable processTable;
@@ -52,7 +52,10 @@ public class Main
 		int selected = tabsState.selected() != null ? tabsState.selected() : 0;
 		processTable.update(snapshot.processes(), ioProcessView);
 		Element tabContent = switch (selected) {
-			case 1 -> diskPanel.render(snapshot);
+			case 1 -> {
+				diskTable.update(snapshot.diskInfos());
+				yield panel("DISK", diskTable).rounded().fill();
+			}
 			case 2 -> netPanel.render(snapshot);
 			default -> panel("PROC", processTable).rounded().fill();
 		};
@@ -88,15 +91,27 @@ public class Main
 				return EventResult.HANDLED;
 			}
 			if (event.isUp()) {
-				processTable.navigateUp();
+				switch (selected) {
+					case 0  -> processTable.navigateUp();
+					case 1 -> diskTable.navigateUp();
+					case 2 -> netPanel.navigateUp();
+				}
 				return EventResult.HANDLED;
 			}
 			if (event.isDown()) {
-				processTable.navigateDown();
+				switch (selected) {
+					case 0  -> processTable.navigateDown();
+					case 1  -> diskTable.navigateDown();
+					case 2 -> netPanel.navigateDown();
+				}
 				return EventResult.HANDLED;
 			}
 			if (event.isCancel()) {
-				processTable.deselect();
+				switch (selected) {
+					case 0  -> processTable.deselect();
+					case 1  -> diskTable.deselect();
+					case 2 -> netPanel.deselect();
+				}
 				return EventResult.HANDLED;
 			}
 			return EventResult.UNHANDLED;
@@ -113,7 +128,7 @@ public class Main
 		memoryPanel = new MemoryPanel();
 		headerPanel = new HeaderPanel();
 		systemPanel = new SystemPanel();
-		diskPanel = new DiskPanel();
+		diskTable = new DiskTable();
 		netPanel = new NetPanel();
 		footerPanel = new FooterPanel();
 		processTable = new ProcessTable();
