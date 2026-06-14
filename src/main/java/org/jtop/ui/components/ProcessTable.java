@@ -250,6 +250,7 @@ public class ProcessTable
 
 	private Cell headerCell(String text, int width, int colIndex) {
 		String display;
+		Style style;
 		if (colIndex == sortColumn) {
 			String indicator = sortAscending ? "\u25B2" : "\u25BC";
 			if (text.length() + 2 <= width) {
@@ -257,10 +258,12 @@ public class ProcessTable
 			} else {
 				display = String.format("%-" + width + "s", indicator);
 			}
+			style = Style.EMPTY.bold().bg(Color.BLUE).fg(Color.WHITE);
 		} else {
 			display = String.format("%-" + width + "s", text);
+			style = HEADER_STYLE;
 		}
-		return Cell.from(display).style(HEADER_STYLE);
+		return Cell.from(display).style(style);
 	}
 
 	public void deselect() {

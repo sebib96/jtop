@@ -150,6 +150,7 @@ public class DiskTable
 
 	private Cell headerCell(String text, int width, int colIndex) {
 		String display;
+		Style style;
 		if (colIndex == sortColumn) {
 			String indicator = sortAscending ? "\u25B2" : "\u25BC";
 			if (text.length() + 2 <= width) {
@@ -157,10 +158,12 @@ public class DiskTable
 			} else {
 				display = String.format("%-" + width + "s", indicator);
 			}
+			style = Style.EMPTY.bold().bg(Color.BLUE).fg(Color.WHITE);
 		} else {
 			display = String.format("%-" + width + "s", text);
+			style = Style.EMPTY.bold().bg(Color.DARK_GRAY).fg(Color.WHITE);
 		}
-		return Cell.from(display).style(Style.EMPTY.bold().bg(Color.DARK_GRAY).fg(Color.WHITE));
+		return Cell.from(display).style(style);
 	}
 
 	public void deselect() {
