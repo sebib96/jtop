@@ -60,6 +60,13 @@ public class Main
 			default -> panel("PROC", processTable).rounded().fill();
 		};
 
+		boolean sortActive = switch (selected) {
+			case 0 -> processTable.isSortActive();
+			case 1 -> diskTable.isSortActive();
+			case 2 -> netPanel.isSortActive();
+			default -> false;
+		};
+
 		Column mainContent = column(
 				cpuPanel.render(snapshot),
 				row(
@@ -70,7 +77,7 @@ public class Main
 								systemPanel.render(snapshot)
 						)
 				), new TabBar(tabsState), tabContent,
-				footerPanel.render(selected, ioProcessView)
+				footerPanel.render(selected, ioProcessView, sortActive)
 		).fill();
 
 		return mainContent.onKeyEvent(event -> {
@@ -88,6 +95,14 @@ public class Main
 			}
 			if (event.isChar('i')) {
 				ioProcessView = !ioProcessView;
+				return EventResult.HANDLED;
+			}
+			if (event.isChar('t')) {
+				switch (selected) {
+					case 0 -> processTable.activateSort();
+					case 1 -> diskTable.activateSort();
+					case 2 -> netPanel.activateSort();
+				}
 				return EventResult.HANDLED;
 			}
 			if (event.isUp()) {
@@ -108,9 +123,9 @@ public class Main
 			}
 			if (event.isCancel()) {
 				switch (selected) {
-					case 0  -> processTable.deselect();
-					case 1  -> diskTable.deselect();
-					case 2 -> netPanel.deselect();
+					case 0  -> { processTable.deselect(); processTable.resetSort(); }
+					case 1  -> { diskTable.deselect(); diskTable.resetSort(); }
+					case 2 -> { netPanel.deselect(); netPanel.resetSort(); }
 				}
 				return EventResult.HANDLED;
 			}

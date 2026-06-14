@@ -68,4 +68,7 @@ public class NetPanel {
 	public void navigateUp()   { networkTable.navigateUp(); }
 	public void navigateDown() { networkTable.navigateDown(); }
 	public void deselect()     { networkTable.deselect(); }
+	public void resetSort()    { networkTable.resetSort(); }
+	public boolean isSortActive() { return networkTable.isSortActive(); }
+	public void activateSort()   { networkTable.activateSort(); }
 }
